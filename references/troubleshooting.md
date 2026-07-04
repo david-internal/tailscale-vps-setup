@@ -10,6 +10,12 @@
 | VPS shows offline in `tailscale status` | tailscaled not running, or machine key expired | On the VPS: `sudo systemctl enable --now tailscaled`, then `sudo tailscale up --ssh`. Disable key expiry in the admin console for servers |
 | Two machines with the same hostname | Cloned VPS images | `sudo tailscale up --ssh --hostname=<unique-name>` |
 | Locked out of VPS after firewall change | Public SSH closed before tailnet SSH was verified | Use the VPS provider's web console to undo the firewall rule. This is why Step 5 comes after Step 4 |
+| `tailscale set --ssh` aborts: "will result in your session disconnecting" | You're enabling Tailscale SSH over a tailnet SSH session | Expected. Re-run with `--accept-risk=lose-ssh`, let the session drop, reconnect |
+| Host key warning ("REMOTE HOST IDENTIFICATION HAS CHANGED") right after enabling Tailscale SSH | tailscaled now answers SSH instead of sshd — different host key, not an attack | `ssh-keygen -R <vps-ip-or-name>`, then reconnect |
+| SSH to a **tagged** device refused, untagged devices fine | Default ACL `ssh` rule only covers devices you own (`autogroup:self`), which excludes tagged nodes | Admin console → Access Controls → add an `ssh` rule with the tag as `dst` |
+| Password auth still works after setting `PasswordAuthentication no` in a drop-in | Drop-in sorts after `50-cloud-init.conf`; OpenSSH keeps the **first** value it sees | Name the file `00-hardening.conf`, restart ssh, verify with `sudo sshd -T \| grep -i passwordauthentication` |
+| Connections went relayed (DERP) after enabling ufw | Inbound UDP 41641 blocked, direct path lost | `sudo ufw allow 41641/udp` |
+| Agent stuck: `sudo: a terminal is required to read the password` | Agent ran sudo without a TTY | Hand the exact command to the user's terminal, or on macOS wrap it in `osascript ... with administrator privileges` (gives the user a password dialog) |
 
 ## Useful commands
 
