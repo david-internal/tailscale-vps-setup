@@ -15,7 +15,7 @@ A Claude Code skill that connects your PC and your VPS over [Tailscale](https://
 
 ## Companion skill
 
-[`agent-fleet-manager`](https://github.com/Maciejdziuba/agent-fleet-manager) — once your machines are on one tailnet, one agent can manage and update every other agent and model on the network.
+[`agent-fleet-manager`](https://github.com/david-internal/agent-fleet-manager) — once your machines are on one tailnet, one agent can manage and update every other agent and model on the network.
 
 ---
 
